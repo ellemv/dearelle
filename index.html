@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Diary</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ── SIDEBAR ── -->
+  <aside id="sidebar">
+    <div class="sidebar-top">
+      <div class="brand">
+        <span class="brand-icon">✦</span>
+        <h1 class="brand-name">My Diary</h1>
+      </div>
+      <p class="brand-sub">A quiet place for your thoughts</p>
+      <button id="new-entry-btn" onclick="openEditor()">+ New Entry</button>
+    </div>
+
+    <div class="search-wrap">
+      <input id="search" type="text" placeholder="Search entries…" oninput="renderList()" />
+    </div>
+
+    <nav id="entry-list">
+      <!-- populated by JS -->
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="export-btn" onclick="exportAll()">⬇ Export All</button>
+      <label class="import-label">
+        ⬆ Import
+        <input type="file" accept=".json" onchange="importAll(event)" style="display:none" />
+      </label>
+    </div>
+  </aside>
+
+  <!-- ── HAMBURGER (mobile) ── -->
+  <button id="hamburger" onclick="toggleSidebar()">☰</button>
+
+  <!-- ── MAIN PANEL ── -->
+  <main id="main">
+
+    <!-- WELCOME SCREEN -->
+    <section id="welcome" class="panel active">
+      <div class="welcome-inner">
+        <div class="welcome-icon">✦</div>
+        <h2>Welcome to your diary</h2>
+        <p>Select an entry from the sidebar or start a new one.<br/>Everything is saved locally in your browser.</p>
+        <button onclick="openEditor()">Begin writing →</button>
+      </div>
+    </section>
+
+    <!-- EDITOR -->
+    <section id="editor-panel" class="panel">
+      <div class="editor-header">
+        <input id="editor-title" type="text" placeholder="Entry title…" />
+        <div class="editor-meta">
+          <input id="editor-date" type="date" />
+          <input id="editor-mood" type="text" placeholder="Mood (e.g. calm, hopeful)" maxlength="30" />
+        </div>
+      </div>
+      <textarea id="editor-body" placeholder="Write freely… Markdown is supported."></textarea>
+      <div class="editor-actions">
+        <span id="char-count">0 words</span>
+        <div>
+          <button class="btn-ghost" onclick="cancelEdit()">Cancel</button>
+          <button class="btn-save" onclick="saveEntry()">Save Entry</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEWER -->
+    <section id="viewer-panel" class="panel">
+      <div class="viewer-header">
+        <div>
+          <h2 id="view-title"></h2>
+          <div class="view-meta">
+            <span id="view-date"></span>
+            <span id="view-mood" class="mood-tag"></span>
+          </div>
+        </div>
+        <div class="viewer-actions">
+          <button class="btn-ghost" onclick="editCurrent()">Edit</button>
+          <button class="btn-danger" onclick="deleteConfirm()">Delete</button>
+        </div>
+      </div>
+      <article id="view-body"></article>
+    </section>
+
+  </main>
+
+  <!-- TOAST -->
+  <div id="toast"></div>
+
+  <!-- CONFIRM MODAL -->
+  <div id="modal-overlay" onclick="closeModal()">
+    <div id="modal" onclick="event.stopPropagation()">
+      <p id="modal-text">Are you sure?</p>
+      <div class="modal-btns">
+        <button class="btn-ghost" onclick="closeModal()">Cancel</button>
+        <button class="btn-danger" id="modal-confirm">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- marked.js for markdown rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
